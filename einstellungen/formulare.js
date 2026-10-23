@@ -85,6 +85,12 @@
         { id: "heizkoerper", typ: "liste", label: "Anzahl Heizkörper", optionen: [...Array.from({ length: 30 }, (_, i) => String(i + 1)), "mehr als 30"], breite: "drittel" },
         { id: "flaechenheizung", typ: "mehrfach", label: "Flächenheizung", optionen: ["FBH", "Wandheizung"], breite: "drittel" },
 
+        { typ: "abschnitt", titel: "Kamin / Schornstein" },
+        { id: "kaminHoehe", typ: "liste", label: "Gesamthöhe", optionen: Array.from({ length: 60 }, (_, i) => `${String((i + 1) / 2).replace(".", ",")} m`), breite: "drittel" },
+        { id: "kaminQuerschnitt", typ: "auswahl", label: "Querschnitt", optionen: ["Rund", "Quadratisch"], breite: "drittel" },
+        { id: "kaminDurchmesser", typ: "liste", label: "Innen-Durchmesser", optionen: Array.from({ length: 41 }, (_, i) => `${i + 10} cm`), breite: "drittel", wenn: { feld: "kaminQuerschnitt", wert: "Rund" } },
+        { id: "kaminSchenkel", typ: "liste", label: "Schenkellänge", optionen: Array.from({ length: 41 }, (_, i) => `${i + 10} cm`), breite: "drittel", wenn: { feld: "kaminQuerschnitt", wert: "Quadratisch" } },
+
         { typ: "abschnitt", titel: "2. Verbrauch · 3. Zeitraum · 4. Budget" },
         { id: "verbrauch", typ: "text", label: "Öl- / Gasverbrauch Ø pro Jahr", breite: "halb" },
         { id: "von", typ: "text", label: "Realisierung von", breite: "drittel" },
