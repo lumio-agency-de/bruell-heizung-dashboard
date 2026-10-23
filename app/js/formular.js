@@ -151,7 +151,7 @@
       case "auswahl":
         return wrap(`${lab}<div class="chips" role="radiogroup">${f.optionen.map((o) => `<button type="button" class="chip${v === o ? " an" : ""}" data-ff-wahl="${esc(f.id)}" data-wert="${esc(o)}" role="radio" aria-checked="${v === o}">${esc(o)}</button>`).join("")}</div>`);
       case "liste":
-        return wrap(`<label>${lab}<span class="ff-eingabe-wrap"><select class="eingabe" ${attr}><option value="">– bitte wählen –</option>${f.optionen.map((o) => `<option${v === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>${f.einheit ? `<span class="einheit">${esc(f.einheit)}</span>` : ""}</span></label>`);
+        return wrap(`<label>${lab}<span class="ff-eingabe-wrap"><select class="eingabe" ${attr}><option value="">– bitte wählen –</option>${f.optionen.map((o) => `<option${v === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select>${f.einheit || f.einheitPlatz ? `<span class="einheit">${esc(f.einheit || "")}</span>` : ""}</span></label>`);
       case "mehrfach": {
         const arr = Array.isArray(v) ? v : [];
         return wrap(`${lab}<div class="chips">${f.optionen.map((o) => `<button type="button" class="chip mehr${arr.includes(o) ? " an" : ""}" data-ff-mehr="${esc(f.id)}" data-wert="${esc(o)}" aria-pressed="${arr.includes(o)}">${esc(o)}</button>`).join("")}</div>`);
