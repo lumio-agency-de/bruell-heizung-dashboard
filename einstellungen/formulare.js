@@ -100,9 +100,11 @@
 
         { typ: "abschnitt", titel: "Kamin / Schornstein" },
         { id: "kaminHoehe", typ: "liste", label: "Gesamthöhe", optionen: Array.from({ length: 60 }, (_, i) => String((i + 1) / 2).replace(".", ",")), einheit: "m", breite: "drittel" },
-        { id: "kaminQuerschnitt", typ: "auswahl", label: "Querschnitt", optionen: ["Rund", "Quadratisch"], breite: "drittel" },
+        { id: "kaminQuerschnitt", typ: "auswahl", label: "Querschnitt", optionen: ["Rund", "Quadratisch", "Rechteckig"], breite: "drittel" },
         { id: "kaminDurchmesser", typ: "liste", label: "Innen-Durchmesser", optionen: Array.from({ length: 41 }, (_, i) => String(i + 10)), einheit: "cm", breite: "drittel", wenn: { feld: "kaminQuerschnitt", wert: "Rund" } },
         { id: "kaminSchenkel", typ: "liste", label: "Schenkellänge", optionen: Array.from({ length: 41 }, (_, i) => String(i + 10)), einheit: "cm", breite: "drittel", wenn: { feld: "kaminQuerschnitt", wert: "Quadratisch" } },
+        { id: "kaminSeiteA", typ: "liste", label: "Seite A", optionen: Array.from({ length: 41 }, (_, i) => String(i + 10)), einheit: "cm", breite: "drittel", start: 9, wenn: { feld: "kaminQuerschnitt", wert: "Rechteckig" } },
+        { id: "kaminSeiteB", typ: "liste", label: "Seite B", optionen: Array.from({ length: 41 }, (_, i) => String(i + 10)), einheit: "cm", breite: "drittel", start: 9, wenn: { feld: "kaminQuerschnitt", wert: "Rechteckig" } },
 
         { typ: "abschnitt", titel: "Tankraum" },
         { id: "tankraumLaenge", typ: "zahl", label: "Länge des Raumes", einheit: "m", breite: "drittel" },
