@@ -26,7 +26,7 @@
 
    Optionen pro Feld
      pflicht: true       muss ausgefüllt sein, damit das Formular als erledigt gilt
-     breite: "halb" | "drittel" | "viertel" | Zahl 1–12 (Spalten)   (Standard: volle Breite)
+     breite: "halb" | "drittel" | "viertel"   (Standard: volle Breite)
      wenn: { feld, wert }        nur sichtbar, wenn ein anderes Feld diesen Wert hat
      wenn: { formular, feld, wert }  … oder ein Feld eines anderen Formulars
                                     (ist das andere Formular leer, wird angezeigt)
@@ -73,10 +73,10 @@
         { id: "einheiten", typ: "zahl", label: "Anzahl Wohneinheiten", breite: "viertel" },
 
         { typ: "abschnitt", titel: "1. Vorhandene Heizung" },
-        { id: "system", typ: "auswahl", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Zusätzlicher Holzofen"], pflicht: true, breite: 5 },
-        { id: "energie", typ: "auswahl", label: "Energieträger", optionen: ["Gas", "Öl", "Sonstiges"], pflicht: true, breite: 3 },
-        { id: "kessel", typ: "mehrfach", label: "Kessel / Technik", optionen: ["Brennwertkessel", "Wärmepumpe", "Solar"], breite: 4 },
-        { id: "energieText", typ: "text", label: "Welcher?", breite: 4, wenn: { feld: "energie", wert: "Sonstiges" } },
+        { id: "system", typ: "auswahl", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Zusätzlicher Holzofen"], pflicht: true },
+        { id: "energie", typ: "auswahl", label: "Energieträger", optionen: ["Gas", "Öl", "Sonstiges"], pflicht: true, breite: "halb" },
+        { id: "energieText", typ: "text", label: "Welcher?", breite: "halb", wenn: { feld: "energie", wert: "Sonstiges" } },
+        { id: "kessel", typ: "mehrfach", label: "Kessel / Technik", optionen: ["Brennwertkessel", "Wärmepumpe", "Solar"] },
         { id: "kesselBaujahr", typ: "zahl", label: "Baujahr", breite: "drittel" },
         { id: "kesselLeistung", typ: "zahl", label: "Leistung", einheit: "kW", breite: "drittel" },
         { id: "kesselNotiz", typ: "text", label: "Hersteller / Typ / Sonstiges", breite: "drittel" },

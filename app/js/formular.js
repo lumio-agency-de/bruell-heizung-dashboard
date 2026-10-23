@@ -101,7 +101,7 @@
   /* ---------------- Editor ---------------- */
   function feldHtml(f, p, w, ctx) {
     if (!sichtbar(f, w, p)) return "";
-    const span = typeof f.breite === "number" ? f.breite : BREITE[f.breite] || 12;
+    const span = BREITE[f.breite] || 12;
     const v = wert(p, f, w);
     const fehlt = ctx.zeigeFehler && f.pflicht && f.typ !== "checkliste" && !gefuellt(f, v, p, ctx.dateien);
     const lab = f.label ? `<span class="ff-label">${esc(f.label)}${f.pflicht ? ' <i class="pf" title="Pflichtfeld">•</i>' : ""}</span>` : "";
