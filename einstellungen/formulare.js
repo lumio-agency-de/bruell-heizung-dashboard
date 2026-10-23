@@ -109,7 +109,7 @@
         { id: "vormauerungLaenge", typ: "zahl", label: "Länge", einheit: "m", breite: "drittel" },
         { typ: "untertitel", titel: "Tank" },
         { id: "tankart", typ: "auswahl", label: "Tankart", optionen: ["Erdtank", "Stahltank", "Kunststofftank"], breite: "drittel" },
-        { id: "tankAnzahl", typ: "liste", label: "Anzahl Kunststofftanks", optionen: Array.from({ length: 10 }, (_, i) => String(i + 1)), breite: "drittel", start: 5, wenn: { feld: "tankart", wert: "Kunststofftank" } },
+        { id: "tankAnzahl", typ: "liste", label: "Anzahl Kunststofftanks", einheit: "Stk.", optionen: Array.from({ length: 10 }, (_, i) => String(i + 1)), breite: "drittel", start: 5, wenn: { feld: "tankart", wert: "Kunststofftank" } },
         { id: "tankVolumen", typ: "zahl", label: "Tankvolumen gesamt", einheit: "l", breite: "drittel", start: 1 },
         { id: "tankInhalt", typ: "zahl", label: "Aktueller Tankinhalt", einheit: "l", breite: "drittel" },
         { typ: "untertitel", titel: "Tür zum Tankraum" },

@@ -127,7 +127,8 @@ code { font-size: .85em; background: var(--tinte-weich); padding: 1px 5px; borde
 .eingabe:hover { border-color: color-mix(in oklab, var(--tinte) 40%, transparent); }
 .eingabe:focus { outline: none; border-color: var(--tinte); box-shadow: 0 0 0 3px color-mix(in oklab, var(--akzent) 32%, transparent); }
 textarea.eingabe { resize: vertical; min-height: 70px; line-height: 1.5; }
-select.eingabe { cursor: pointer; }
+select.eingabe { cursor: pointer; -webkit-appearance: none; appearance: none; padding-right: 30px;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23042461' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat right 11px center; }
 .felder { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
 .felder.drei { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .felder .breit { grid-column: 1 / -1; }
@@ -358,7 +359,7 @@ a.zeile:hover { background: var(--tinte-weich); }
 .ff-label .pf { color: var(--akzent); font-style: normal; }
 .ff label { display: block; }
 .ff-eingabe-wrap { display: flex; align-items: center; gap: 6px; }
-.einheit { font-size: .82rem; color: var(--leise); }
+.einheit { font-size: .82rem; color: var(--leise); min-width: 2em; }
 .ff.fehlt .ff-label { color: var(--rot); }
 .ff.fehlt .eingabe, .ff.fehlt .seg, .ff.fehlt .sign, .ff.fehlt .drop { border-color: var(--rot); box-shadow: 0 0 0 2px color-mix(in oklab, var(--rot) 15%, transparent); }
 .tab-wrap { overflow-x: auto; border: 1px solid var(--fuge-stark); border-radius: var(--radius); }
@@ -793,7 +794,7 @@ code.pw { font-size: 1.05rem; padding: 3px 8px; background: var(--akzent-weich);
 
 /* Tabellen: Felder sichtbar, „+“ je Zeile */
 .ff-tab td .eingabe { border-color: var(--fuge-stark); background: #fff; }
-.ff-tab td select.eingabe { padding-right: 4px; }
+.ff-tab td select.eingabe { padding-right: 22px; background-position: right 6px center; }
 .ff-tab th[scope="row"] { position: relative; padding-right: 30px; }
 .tz-plus { position: absolute; right: 4px; top: 50%; translate: 0 -50%; width: 22px; height: 22px; border-radius: 50%; border: 1px solid var(--fuge-stark); background: var(--blatt); color: var(--tinte); font-weight: 700; line-height: 1; cursor: pointer; opacity: .55; transition: opacity 150ms ease, background-color 150ms ease, transform 150ms var(--ease-out); }
 tr:hover .tz-plus, .tz-plus:focus-visible { opacity: 1; }
