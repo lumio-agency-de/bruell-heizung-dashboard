@@ -88,6 +88,11 @@
         { id: "heizkreise", typ: "liste", label: "Anzahl Heizkreise", optionen: Array.from({ length: 10 }, (_, i) => String(i + 1)), breite: "drittel" },
         { id: "flaechenheizung", typ: "mehrfach", label: "Flächenheizung", optionen: ["FBH", "Wandheizung"], breite: "drittel" },
 
+        { typ: "abschnitt", titel: "Heizraum" },
+        { id: "heizraumLaenge", typ: "zahl", label: "Länge des Raumes", einheit: "m", breite: "drittel" },
+        { id: "heizraumBreite", typ: "zahl", label: "Breite des Raumes", einheit: "m", breite: "drittel" },
+        { id: "heizraumHoehe", typ: "zahl", label: "Höhe des Raumes", einheit: "m", breite: "drittel" },
+
         { typ: "abschnitt", titel: "Kamin / Schornstein" },
         { id: "kaminHoehe", typ: "liste", label: "Gesamthöhe", optionen: Array.from({ length: 60 }, (_, i) => `${String((i + 1) / 2).replace(".", ",")} m`), breite: "drittel" },
         { id: "kaminQuerschnitt", typ: "auswahl", label: "Querschnitt", optionen: ["Rund", "Quadratisch"], breite: "drittel" },
