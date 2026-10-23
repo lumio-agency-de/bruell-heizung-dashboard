@@ -28,6 +28,7 @@
    Optionen pro Feld
      pflicht: true       muss ausgefüllt sein, damit das Formular als erledigt gilt
      breite: "halb" | "drittel" | "viertel" | Zahl 1–12 (Spalten)   (Standard: volle Breite)
+     start: 1                    Feld beginnt in dieser Spalte (1 = neue Zeile)
      wenn: { feld, wert }        nur sichtbar, wenn ein anderes Feld diesen Wert hat
      wenn: { formular, feld, wert }  … oder ein Feld eines anderen Formulars
                                     (ist das andere Formular leer, wird angezeigt)
@@ -79,11 +80,12 @@
         { id: "energieText", typ: "text", label: "Welcher?", breite: "halb", wenn: { feld: "energie", wert: "Sonstiges" } },
         { id: "kessel", typ: "mehrfach", label: "Kessel / Technik", optionen: ["Brennwertkessel", "Brauchwasserwärmepumpe", "Solar"], breite: 7 },
         { id: "solarFuer", typ: "mehrfach", label: "Solar für", optionen: ["Heizung", "Warmwasser"], breite: 5, wenn: { feld: "kessel", wert: "Solar" } },
-        { id: "kesselBaujahr", typ: "zahl", label: "Baujahr", breite: "drittel" },
-        { id: "kesselLeistung", typ: "zahl", label: "Leistung", einheit: "kW", breite: "drittel" },
-        { id: "kesselNotiz", typ: "text", label: "Hersteller / Typ / Sonstiges", breite: "drittel" },
-        { id: "rohrsystem", typ: "auswahl", label: "Rohrsystem", optionen: ["Einrohrsystem", "Zweirohrsystem"], breite: "drittel" },
+        { id: "kesselBaujahr", typ: "zahl", label: "Baujahr", breite: 2, start: 1 },
+        { id: "kesselLeistung", typ: "zahl", label: "Leistung", einheit: "kW", breite: 3 },
+        { id: "kesselNotiz", typ: "text", label: "Hersteller / Typ / Sonstiges", breite: 3 },
+        { id: "rohrsystem", typ: "auswahl", label: "Rohrsystem", optionen: ["Einrohrsystem", "Zweirohrsystem"], breite: 4 },
         { id: "heizkoerper", typ: "liste", label: "Anzahl Heizkörper", optionen: [...Array.from({ length: 30 }, (_, i) => String(i + 1)), "mehr als 30"], breite: "drittel" },
+        { id: "heizkreise", typ: "liste", label: "Anzahl Heizkreise", optionen: Array.from({ length: 10 }, (_, i) => String(i + 1)), breite: "drittel" },
         { id: "flaechenheizung", typ: "mehrfach", label: "Flächenheizung", optionen: ["FBH", "Wandheizung"], breite: "drittel" },
 
         { typ: "abschnitt", titel: "Kamin / Schornstein" },

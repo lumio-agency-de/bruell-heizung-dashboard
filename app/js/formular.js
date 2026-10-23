@@ -105,7 +105,7 @@
     const v = wert(p, f, w);
     const fehlt = ctx.zeigeFehler && f.pflicht && f.typ !== "checkliste" && !gefuellt(f, v, p, ctx.dateien);
     const lab = f.label ? `<span class="ff-label">${esc(f.label)}${f.pflicht ? ' <i class="pf" title="Pflichtfeld">•</i>' : ""}</span>` : "";
-    const wrap = (inner, cls = "") => `<div class="ff${fehlt ? " fehlt" : ""} ${cls}" style="--span:${span}" data-feld-box="${esc(f.id)}">${inner}${fehlt ? '<span class="ff-fehlt-text">Pflichtfeld – bitte ausfüllen</span>' : ""}</div>`;
+    const wrap = (inner, cls = "") => `<div class="ff${fehlt ? " fehlt" : ""} ${cls}" style="--span:${span}${f.start ? `;--start:${f.start}` : ""}"${f.start ? " data-start" : ""} data-feld-box="${esc(f.id)}">${inner}${fehlt ? '<span class="ff-fehlt-text">Pflichtfeld – bitte ausfüllen</span>' : ""}</div>`;
     const attr = `data-ff="${esc(f.id)}"`;
 
     switch (f.typ) {

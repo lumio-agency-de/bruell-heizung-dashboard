@@ -349,6 +349,7 @@ a.zeile:hover { background: var(--tinte-weich); }
 .ff-index a:hover { color: var(--tinte); border-color: var(--akzent); }
 .ff-raster { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 14px 14px; align-items: start; }
 .ff { grid-column: span var(--span); min-width: 0; }
+.ff[data-start] { grid-column: var(--start) / span var(--span); }
 .ff.breit-tab { grid-column: 1 / -1; }
 .ff-abschnitt { grid-column: 1 / -1; font-size: 1.15rem; padding-top: 14px; margin-top: 4px; border-top: 2px solid var(--tinte); scroll-margin-top: 110px; }
 .ff-untertitel { grid-column: 1 / -1; font-size: .95rem; margin: 6px 0 -4px; color: var(--tinte); }
@@ -497,7 +498,7 @@ textarea.mail-text { min-height: 330px; font-size: .88rem; }
   .nav a { padding: 7px 9px; white-space: nowrap; }
   .kpis { grid-template-columns: 1fr 1fr; }
   .ff-raster { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .ff { grid-column: span 2; }
+  .ff, .ff[data-start] { grid-column: span 2; }
   .ff-check li, .ff-check li:has(.seg) { grid-template-columns: auto 1fr; }
   .ff-check .ck-notiz, .ff-check li:has(.seg) .seg { grid-column: 1 / -1; }
   .felder, .felder.drei { grid-template-columns: 1fr; }
