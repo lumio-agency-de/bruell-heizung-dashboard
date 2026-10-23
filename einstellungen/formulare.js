@@ -80,9 +80,9 @@
         { id: "kesselBaujahr", typ: "zahl", label: "Baujahr", breite: "drittel" },
         { id: "kesselLeistung", typ: "zahl", label: "Leistung", einheit: "kW", breite: "drittel" },
         { id: "kesselNotiz", typ: "text", label: "Hersteller / Typ / Sonstiges", breite: "drittel" },
-        { id: "rohrsystem", typ: "auswahl", label: "Rohrsystem", optionen: ["Einrohrsystem", "Zweirohrsystem"], breite: "halb" },
-        { id: "heizkoerper", typ: "liste", label: "Anzahl Heizkörper", optionen: [...Array.from({ length: 30 }, (_, i) => String(i + 1)), "mehr als 30"], breite: "halb" },
-        { id: "flaechenheizung", typ: "mehrfach", label: "Flächenheizung", optionen: ["FBH (Fußbodenheizung)", "Wandheizung"] },
+        { id: "rohrsystem", typ: "auswahl", label: "Rohrsystem", optionen: ["Einrohrsystem", "Zweirohrsystem"], breite: "drittel" },
+        { id: "heizkoerper", typ: "liste", label: "Anzahl Heizkörper", optionen: [...Array.from({ length: 30 }, (_, i) => String(i + 1)), "mehr als 30"], breite: "drittel" },
+        { id: "flaechenheizung", typ: "mehrfach", label: "Flächenheizung", optionen: ["FBH", "Wandheizung"], breite: "drittel" },
 
         { typ: "abschnitt", titel: "2. Verbrauch · 3. Zeitraum · 4. Budget" },
         { id: "verbrauch", typ: "text", label: "Öl- / Gasverbrauch Ø pro Jahr", breite: "halb" },
