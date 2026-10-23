@@ -76,7 +76,7 @@
         { id: "einheiten", typ: "zahl", label: "Anzahl Wohneinheiten", breite: "viertel" },
 
         { typ: "abschnitt", titel: "1. Vorhandene Heizung" },
-        { id: "system", typ: "mehrfach", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Zusätzlicher Holzofen"], pflicht: true },
+        { id: "system", typ: "mehrfach", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Dachheizzentrale", "Zusätzlicher Holzofen"], pflicht: true },
         { id: "energie", typ: "auswahl", label: "Energieträger", optionen: ["Gas", "Öl", "Sonstiges"], pflicht: true, breite: "halb" },
         { id: "energieText", typ: "text", label: "Welcher?", breite: "halb", wenn: { feld: "energie", wert: "Sonstiges" } },
         { id: "kessel", typ: "mehrfach", label: "Kessel / Technik", optionen: ["Brennwertkessel", "Brauchwasserwärmepumpe", "Solar"], breite: 7 },
