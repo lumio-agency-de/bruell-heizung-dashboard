@@ -5,7 +5,7 @@
   "use strict";
 
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const BREITE = { halb: 3, drittel: 2 };
+  const BREITE = { halb: 6, drittel: 4, viertel: 3 };
   const ANREDEN = ["Herr", "Frau", "Herr und Frau", "Familie"];
 
   const def = (id) => window.FORMULARE[id];
@@ -101,7 +101,7 @@
   /* ---------------- Editor ---------------- */
   function feldHtml(f, p, w, ctx) {
     if (!sichtbar(f, w, p)) return "";
-    const span = BREITE[f.breite] || 6;
+    const span = BREITE[f.breite] || 12;
     const v = wert(p, f, w);
     const fehlt = ctx.zeigeFehler && f.pflicht && f.typ !== "checkliste" && !gefuellt(f, v, p, ctx.dateien);
     const lab = f.label ? `<span class="ff-label">${esc(f.label)}${f.pflicht ? ' <i class="pf" title="Pflichtfeld">•</i>' : ""}</span>` : "";

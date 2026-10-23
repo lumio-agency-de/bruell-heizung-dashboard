@@ -26,7 +26,7 @@
 
    Optionen pro Feld
      pflicht: true       muss ausgefüllt sein, damit das Formular als erledigt gilt
-     breite: "halb" | "drittel"   (Standard: volle Breite)
+     breite: "halb" | "drittel" | "viertel"   (Standard: volle Breite)
      wenn: { feld, wert }        nur sichtbar, wenn ein anderes Feld diesen Wert hat
      wenn: { formular, feld, wert }  … oder ein Feld eines anderen Formulars
                                     (ist das andere Formular leer, wird angezeigt)
@@ -67,10 +67,10 @@
 
         { typ: "abschnitt", titel: "Gebäude" },
         { id: "haus", typ: "auswahl", label: "Gebäude", optionen: ["Einfamilienhaus", "Mehrfamilienhaus", "ELW (Einliegerwohnung)"], pflicht: true },
-        { id: "personen", typ: "zahl", label: "Personen im Haushalt", breite: "drittel" },
-        { id: "baujahr", typ: "zahl", label: "Baujahr des Hauses", breite: "drittel" },
-        { id: "qm", typ: "zahl", label: "Wohnfläche", einheit: "m²", breite: "drittel", pflicht: true },
-        { id: "einheiten", typ: "zahl", label: "Anzahl Wohneinheiten", breite: "drittel" },
+        { id: "personen", typ: "zahl", label: "Personen im Haushalt", breite: "viertel" },
+        { id: "baujahr", typ: "zahl", label: "Baujahr des Hauses", breite: "viertel" },
+        { id: "qm", typ: "zahl", label: "Wohnfläche", einheit: "m²", breite: "viertel", pflicht: true },
+        { id: "einheiten", typ: "zahl", label: "Anzahl Wohneinheiten", breite: "viertel" },
 
         { typ: "abschnitt", titel: "1. Vorhandene Heizung" },
         { id: "system", typ: "auswahl", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Zusätzlicher Holzofen"], pflicht: true },
