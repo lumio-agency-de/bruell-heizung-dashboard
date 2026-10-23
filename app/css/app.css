@@ -134,7 +134,7 @@ select.eingabe { cursor: pointer; }
 .feld label, .feld .lab { display: block; font-size: .68rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--leise); margin-bottom: 4px; }
 
 .chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip { cursor: pointer; padding: 6px 12px; border-radius: 99px; border: 1px solid var(--fuge-stark); background: #fff; font-size: .84rem; font-weight: 500; transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms var(--ease-out); }
+.chip { cursor: pointer; padding: 6px 10px; border-radius: 99px; border: 1px solid var(--fuge-stark); background: #fff; font-size: .84rem; font-weight: 500; transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, transform 150ms var(--ease-out); }
 .chip:hover { border-color: var(--tinte); }
 .chip:active { transform: scale(.96); }
 .mehrwahl { position: relative; max-width: 420px; }
