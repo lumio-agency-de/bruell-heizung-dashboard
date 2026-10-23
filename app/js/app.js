@@ -106,6 +106,8 @@
   }
   const leute = (rolle) => cfg().team.filter((m) => m.rolle === rolle && m.name);
   const namen = (rolle) => leute(rolle).map((m) => m.name).join(" oder ") || rolle;
+  /* Heizungsexperten eines Projekts (mehrere möglich); ältere Projekte haben nur „zustaendig“ */
+  const experten = (p) => (p.experten && p.experten.length ? p.experten : p.zustaendig ? [p.zustaendig] : []);
   const kuerzelListe = () => cfg().team.filter((m) => m.kuerzel).map((m) => m.kuerzel);
   function ersetzen(text) {
     const c = cfg();
@@ -331,7 +333,7 @@
       case "erledigt": return !!st.erledigt;
       case "abschluss": return p.status === "abgeschlossen";
       case "entscheidung": { const o = (s.optionen || []).find((x) => x.id === st.wahl); return !!o && o.weiter !== false; }
-      case "feld": return !!String(p[s.feld] || "").trim();
+      case "feld": return s.feld === "zustaendig" ? experten(p).length > 0 : !!String(p[s.feld] || "").trim();
       case "team": return (p.zugriff || []).length > 0;
     }
     return false;
@@ -608,7 +610,7 @@
      ================================================================ */
   function ansichtCockpit() {
     const meine = ebene() === "planung" && S.nurMeine;
-    const laufend = alle().filter((p) => (p.status === "aktiv" || p.status === "pausiert") && (!meine || p.zustaendig === S.ich.id));
+    const laufend = alle().filter((p) => (p.status === "aktiv" || p.status === "pausiert") && (!meine || experten(p).includes(S.ich.id)));
     const faellig = laufend.flatMap(faelligkeiten).sort((a, b) => a.d - b.d);
     const neu = S.dateien.filter((d) => d.neu && finde(d.projekt_id));
     const termine = [];
@@ -672,7 +674,7 @@
   function teamPanel() {
     const aktiv = alle().filter((p) => p.status === "aktiv" || p.status === "pausiert");
     const zeilen = cfg().team.filter((m) => m.name).map((m) => {
-      const l = m.ebene === "monteur" ? aktiv.filter((p) => (p.zugriff || []).includes(m.kuerzel)) : aktiv.filter((p) => p.zustaendig === m.kuerzel);
+      const l = m.ebene === "monteur" ? aktiv.filter((p) => (p.zugriff || []).includes(m.kuerzel)) : aktiv.filter((p) => experten(p).includes(m.kuerzel));
       return { m, l };
     }).filter((x) => x.m.ebene !== "geschaeftsfuehrung");
     const max = Math.max(1, ...zeilen.map((x) => x.l.length));
@@ -1019,7 +1021,7 @@
     const liste = alle().filter((p) => {
       if (f.status === "offen" && !(p.status === "aktiv" || p.status === "pausiert")) return false;
       if (f.status !== "offen" && f.status !== "alle" && p.status !== f.status) return false;
-      if (f.wer && p.zustaendig !== f.wer) return false;
+      if (f.wer && !experten(p).includes(f.wer)) return false;
       if (q && ![p.kunde.nachname, p.kunde.vorname, p.kunde.ort, p.projektnr, p.kunde.strasse, p.kunde.hausnr].join(" ").toLowerCase().includes(q)) return false;
       return true;
     });
@@ -1186,12 +1188,12 @@
         break;
       }
       case "feld": {
-        const v = p[s.feld] || "";
+        const v = s.feld === "zustaendig" ? experten(p).join(", ") : p[s.feld] || "";
         meta = v ? (s.mehrzeilig ? "notiert" : esc(v)) : "";
         inhalt = s.mehrzeilig
           ? `<div class="q-aktion q-notiz"><textarea class="eingabe" data-pfeld="${s.feld}" rows="4" aria-label="${esc(titel)}" placeholder="${esc(s.platzhalter || "eintragen")}">${esc(v)}</textarea></div>`
           : s.feld === "zustaendig"
-          ? `<div class="chips">${leute("heizungsexperte").map((m) => `<button type="button" class="chip${v === m.kuerzel ? " an" : ""}" data-aktion="setze-feld" data-feld="zustaendig" data-wert="${esc(m.kuerzel)}">${esc(m.name)} (${esc(m.kuerzel)})</button>`).join("")}</div>`
+          ? expertenAuswahl(p)
           : `<div class="q-aktion"><input class="eingabe auto" data-pfeld="${s.feld}" value="${esc(v)}" aria-label="${esc(titel)}" placeholder="eintragen"></div>`;
         break;
       }
@@ -1209,6 +1211,16 @@
       <span class="q-marker" aria-hidden="true">${x.erledigt ? "✓" : k + 1}</span>
       <div class="q-inhalt">${fehltHier ? '<p class="q-fehlt">Fehlt noch – bitte erledigen</p>' : ""}<div class="q-kopf"><h3>${esc(titel)}</h3>${x.pflicht || s.typ === "abschluss" ? "" : '<span class="q-tag">optional</span>'}${meta ? `<span class="q-meta">${meta}</span>` : ""}</div>
         ${s.hinweis ? `<p class="q-hinweis">${esc(ersetzen(s.hinweis))}</p>` : ""}${inhalt}</div></li>`;
+  }
+
+  /* Heizungsexperten wählen: Dropdown mit allen Mitarbeitern, Mehrfachauswahl */
+  function expertenAuswahl(p) {
+    const gew = experten(p);
+    const ma = cfg().team.filter((m) => m.name && m.kuerzel && m.ebene !== "monteur")
+      .sort((a, b) => (b.rolle === "heizungsexperte") - (a.rolle === "heizungsexperte"));
+    const namen = gew.map((k) => mitgliedZu(k)?.name || k).join(", ");
+    return `<details class="mehrwahl"><summary class="eingabe">${namen ? esc(namen) : '<span class="leise">Mitarbeiter auswählen …</span>'}</summary>
+      <div class="mehrwahl-liste">${ma.map((m) => `<label><input type="checkbox" data-experte="${esc(m.kuerzel)}"${gew.includes(m.kuerzel) ? " checked" : ""}> ${esc(m.name)} <span class="leise">(${esc(m.kuerzel)} · ${esc(m.bezeichnung || m.rolle)})</span></label>`).join("")}</div></details>`;
   }
 
   /* Akte rechts: Dateien, Kunde, Termine, Verlauf */
@@ -1505,7 +1517,7 @@
       if (key === "downloadCode") return p.downloadCode || fehlt(`${c.programme.app3d}-Code`);
       if (key === "uploadLink") return link || fehlt("Upload-Link");
       if (key === "berater") return leute("geschaeftsfuehrer")[0]?.name || fehlt("Geschäftsführer");
-      if (key === "heizungsexperte") return leute("heizungsexperte")[0]?.name || fehlt("Heizungsexperte");
+      if (key === "heizungsexperte") return experten(p).map((k) => mitgliedZu(k)?.name || k).join(" und ") || leute("heizungsexperte")[0]?.name || fehlt("Heizungsexperte");
       if (key === "firma.name") return c.name;
       if (key === "firma.kurzname") return c.kurzname || c.name;
       if (key === "firma.adresse") return `${c.adresse.strasse}, ${c.adresse.ort}`;
@@ -2540,9 +2552,18 @@
       aendern(p, (x) => { x.termine = x.termine || {}; if (el.value) x.termine[def.key] = el.value; else delete x.termine[def.key]; }, el.value ? `${def.label}: ${fTermin(el.value)}` : `${def.label} entfernt`);
       return teilRendern(p);
     }
+    if (el.dataset.experte && p) {
+      const alt = experten(p), k = el.dataset.experte;
+      const neu = el.checked ? [...alt.filter((x) => x !== k), k] : alt.filter((x) => x !== k);
+      const m = mitgliedZu(k);
+      aendern(p, (x) => { x.experten = neu; x.zustaendig = neu[0] || ""; }, `Heizungsexperte ${el.checked ? "hinzugefügt" : "entfernt"}: ${m ? m.name : k}`);
+      kopfNeu(p); teilRendern(p);
+      const d = document.querySelector("details.mehrwahl"); if (d) d.open = true;
+      return;
+    }
     if (el.dataset.pfeld && p) {
       const k = el.dataset.pfeld;
-      aendern(p, (x) => { x[k] = el.value.trim(); }, k === "angebotNotiz" ? "Notizen zum Angebot geändert" : k === "status" ? `Status: ${STATUS.find((s) => s.id === el.value)?.label}` : k === "projektnr" ? `Projektnummer: ${el.value.trim()}` : k === "bzaNr" ? `BZA-Nummer: ${el.value.trim()}` : k === "bzdNr" ? `BZD-Nummer: ${el.value.trim()}` : k === "downloadCode" ? `Download-Code: ${el.value.trim()}` : null);
+      aendern(p, (x) => { x[k] = el.value.trim(); if (k === "zustaendig") x.experten = x[k] ? [x[k], ...experten(p).filter((e) => e !== x[k])] : []; }, k === "angebotNotiz" ? "Notizen zum Angebot geändert" : k === "status" ? `Status: ${STATUS.find((s) => s.id === el.value)?.label}` : k === "projektnr" ? `Projektnummer: ${el.value.trim()}` : k === "bzaNr" ? `BZA-Nummer: ${el.value.trim()}` : k === "bzdNr" ? `BZD-Nummer: ${el.value.trim()}` : k === "downloadCode" ? `Download-Code: ${el.value.trim()}` : null);
       kopfNeu(p); return teilRendern(p);
     }
     if ((el.dataset.nk || el.dataset.nkTab) && p && istGF()) {

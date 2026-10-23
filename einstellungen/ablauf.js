@@ -82,6 +82,8 @@ window.ABSCHNITTE = [
             { id: "nein", label: "Kein Interesse", status: "verloren", weiter: false },
           ] },
         { id: "eg-termin", typ: "termin", termin: "erstgespraech", titel: "Termin Erstgespräch eintragen", wenn: { schritt: "termin-ok", wert: "ja" } },
+        { id: "berater", typ: "feld", feld: "zustaendig", titel: "Heizungsexperte(n) fürs Erstgespräch", wenn: { schritt: "termin-ok", wert: "ja" },
+          hinweis: "Einen oder mehrere Mitarbeiter auswählen – sie führen das Gespräch und sind im Projekt als Heizungsexperte zuständig." },
       ],
     },
     {
@@ -91,7 +93,6 @@ window.ABSCHNITTE = [
       schritte: [
         { id: "kwp-kunde", typ: "erledigt", titel: "Kunde in {programm.erp} angelegt und mit dem Termin verknüpft",
           hinweis: "Nur Neukunden anlegen – Stammkunden nur mit dem Termin verknüpfen." },
-        { id: "berater", typ: "feld", feld: "zustaendig", titel: "Heizungsexperte fürs Erstgespräch" },
         { id: "mail-termin", typ: "mail", mail: "terminbestaetigung", titel: "Terminbestätigung mit Fotoanleitung & Upload-Link senden" },
         { id: "fotos", typ: "dateien", kategorie: "bilder-alt", kundenlink: true, titel: "Fotos Heizraum & Außenansicht vom Kunden",
           hinweis: "Kommt über den Kundenlink automatisch hier an. Fehlen die Fotos 4 Tage vor dem Termin, meldet sich das Cockpit. Für vollständige Fotos gibt es 100 € Fotorabatt.",
