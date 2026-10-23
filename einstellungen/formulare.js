@@ -29,6 +29,7 @@
      pflicht: true       muss ausgefüllt sein, damit das Formular als erledigt gilt
      breite: "halb" | "drittel" | "viertel" | Zahl 1–12 (Spalten)   (Standard: volle Breite)
      start: 1                    Feld beginnt in dieser Spalte (1 = neue Zeile)
+     einheitPlatz: true          hält Platz für eine Einheit frei, damit Felder bündig stehen
      wenn: { feld, wert }        nur sichtbar, wenn ein anderes Feld diesen Wert hat
      wenn: { formular, feld, wert }  … oder ein Feld eines anderen Formulars
                                     (ist das andere Formular leer, wird angezeigt)
@@ -74,6 +75,9 @@
         { id: "baujahr", typ: "zahl", label: "Baujahr des Hauses", breite: "viertel" },
         { id: "qm", typ: "zahl", label: "Wohnfläche", einheit: "m²", breite: "viertel", pflicht: true },
         { id: "einheiten", typ: "zahl", label: "Anzahl Wohneinheiten", breite: "viertel" },
+        { typ: "untertitel", titel: "Sanierungsmaßnahmen" },
+        { id: "sanierung", typ: "mehrfach", label: "Was wurde saniert?", optionen: ["Fenster", "Dach", "Fassadendämmung"], breite: 6 },
+        { id: "sanierungJahr", typ: "zahl", label: "Jahr der Sanierung", breite: "viertel", start: 7, einheitPlatz: true },
 
         { typ: "abschnitt", titel: "1. Vorhandene Heizung" },
         { id: "system", typ: "mehrfach", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Dachheizzentrale", "Zusätzlicher Holzofen"], pflicht: true },

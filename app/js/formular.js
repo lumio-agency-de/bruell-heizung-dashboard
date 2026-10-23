@@ -118,7 +118,7 @@
           <input class="eingabe zeit" data-ff="${esc(f.id)}Zeit" type="time" step="300" value="${esc(w[f.id + "Zeit"] || "")}" aria-label="Uhrzeit"><span class="einheit">Uhr</span></span>`);
       // fallthrough
       case "text": case "zahl":
-        return wrap(`<label>${lab}<span class="ff-eingabe-wrap"><input class="eingabe" ${attr} type="${f.typ === "zahl" ? "number" : f.typ === "datum" ? "date" : "text"}" value="${esc(v)}"${f.typ === "zahl" ? ' inputmode="decimal" step="any"' : ""}>${f.einheit ? `<span class="einheit">${esc(f.einheit)}</span>` : ""}</span></label>`);
+        return wrap(`<label>${lab}<span class="ff-eingabe-wrap"><input class="eingabe" ${attr} type="${f.typ === "zahl" ? "number" : f.typ === "datum" ? "date" : "text"}" value="${esc(v)}"${f.typ === "zahl" ? ' inputmode="decimal" step="any"' : ""}>${f.einheit || f.einheitPlatz ? `<span class="einheit">${esc(f.einheit || "")}</span>` : ""}</span></label>`);
       case "regler": {
         const n = reglerZahl(f, v), gesetzt = n != null;
         return wrap(`<label class="ff-regler${gesetzt ? "" : " unberuehrt"}">${lab}<output class="regler-wert" data-regler-ausgabe>${gesetzt ? esc(reglerText(f, n)) : "bitte einstellen"}</output>
