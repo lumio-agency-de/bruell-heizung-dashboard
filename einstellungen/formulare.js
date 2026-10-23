@@ -68,7 +68,8 @@
         { id: "bauvorhaben", typ: "text", label: "Abweichende Baustellenadresse", breite: "halb" },
 
         { typ: "abschnitt", titel: "Gebäude" },
-        { id: "haus", typ: "auswahl", label: "Gebäude", optionen: ["Einfamilienhaus", "Mehrfamilienhaus", "ELW (Einliegerwohnung)"], pflicht: true },
+        { id: "haus", typ: "auswahl", label: "Gebäude", optionen: ["Einfamilienhaus", "Mehrfamilienhaus", "ELW (Einliegerwohnung)"], pflicht: true, breite: 9 },
+        { id: "etagen", typ: "liste", label: "Anzahl Etagen", optionen: Array.from({ length: 20 }, (_, i) => String(i + 1)), breite: "viertel" },
         { id: "personen", typ: "zahl", label: "Personen im Haushalt", breite: "viertel" },
         { id: "baujahr", typ: "zahl", label: "Baujahr des Hauses", breite: "viertel" },
         { id: "qm", typ: "zahl", label: "Wohnfläche", einheit: "m²", breite: "viertel", pflicht: true },
