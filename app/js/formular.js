@@ -51,7 +51,7 @@
   const katName = (k) => ((window.KATEGORIEN || []).find((x) => x.id === k) || { titel: k }).titel;
   function gefuellt(f, v, p, dateien) {
     switch (f.typ) {
-      case "abschnitt": return true;
+      case "abschnitt": case "untertitel": return true;
       case "wer": return f.quelle ? true : !!v;
       case "mehrfach": return Array.isArray(v) && v.length > 0;
       case "dateien": return dateien.filter((d) => d.kategorie === f.kategorie || (f.auchAus || []).includes(d.kategorie)).length > 0;
@@ -109,6 +109,8 @@
     const attr = `data-ff="${esc(f.id)}"`;
 
     switch (f.typ) {
+      case "untertitel":
+        return `<h4 class="ff-untertitel">${esc(f.titel)}</h4>`;
       case "abschnitt":
         return `<h3 class="ff-abschnitt" id="abs-${esc(f.titel.replace(/\W+/g, "-"))}">${esc(f.titel)}</h3>`;
       case "datum":
@@ -327,7 +329,7 @@
     def.aktuell = d;
     const w = werteVon(p, id), aus = [];
     for (const f of d.felder) {
-      if (!f.id || !sichtbar(f, w, p) || ["dateien", "unterschrift", "checkliste", "abschnitt", "wer"].includes(f.typ)) continue;
+      if (!f.id || !sichtbar(f, w, p) || ["dateien", "unterschrift", "checkliste", "abschnitt", "untertitel", "wer"].includes(f.typ)) continue;
       const v = f.typ === "wer" && f.quelle ? quellWert(f, p) : w[f.id];
       if (f.typ === "tabelle") {
         const rows = Array.isArray(v) ? v : [];
@@ -356,6 +358,7 @@
     const teile = d.felder.filter((f) => sichtbar(f, w, p)).map((f) => {
       const v = wert(p, f, w);
       if (f.typ === "abschnitt") return `<h3>${esc(f.titel)}</h3>`;
+      if (f.typ === "untertitel") return `<h4>${esc(f.titel)}</h4>`;
       if (f.typ === "tabelle") {
         const rows = Array.isArray(v) ? v : [];
         const zeilen = f.zeilen ? tabellenZeilen(f, rows).map((z) => ({ label: z.eigen ? (z.r._label || "Eigene Zeile") : z.label, r: z.r })) : rows.map((r) => ({ r }));

@@ -351,6 +351,7 @@ a.zeile:hover { background: var(--tinte-weich); }
 .ff { grid-column: span var(--span); min-width: 0; }
 .ff.breit-tab { grid-column: 1 / -1; }
 .ff-abschnitt { grid-column: 1 / -1; font-size: 1.15rem; padding-top: 14px; margin-top: 4px; border-top: 2px solid var(--tinte); scroll-margin-top: 110px; }
+.ff-untertitel { grid-column: 1 / -1; font-size: .95rem; margin: 6px 0 -4px; color: var(--tinte); }
 .ff-abschnitt:first-child { border-top: 0; padding-top: 0; margin-top: 0; }
 .ff-label { display: block; font-size: .7rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--leise); margin-bottom: 5px; }
 .ff-label .pf { color: var(--akzent); font-style: normal; }
