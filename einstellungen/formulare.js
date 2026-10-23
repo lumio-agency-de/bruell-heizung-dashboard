@@ -91,6 +91,13 @@
         { id: "kaminDurchmesser", typ: "liste", label: "Innen-Durchmesser", optionen: Array.from({ length: 41 }, (_, i) => `${i + 10} cm`), breite: "drittel", wenn: { feld: "kaminQuerschnitt", wert: "Rund" } },
         { id: "kaminSchenkel", typ: "liste", label: "Schenkellänge", optionen: Array.from({ length: 41 }, (_, i) => `${i + 10} cm`), breite: "drittel", wenn: { feld: "kaminQuerschnitt", wert: "Quadratisch" } },
 
+        { typ: "abschnitt", titel: "Tankraum" },
+        { id: "tankraumLaenge", typ: "zahl", label: "Länge des Raumes", einheit: "m", breite: "drittel" },
+        { id: "tankraumBreite", typ: "zahl", label: "Breite des Raumes", einheit: "m", breite: "drittel" },
+        { id: "tankraumHoehe", typ: "zahl", label: "Höhe des Raumes", einheit: "m", breite: "drittel" },
+        { id: "tankart", typ: "auswahl", label: "Tank", optionen: ["Erdtank", "Stahltank", "Kunststofftank"], breite: "halb" },
+        { id: "tankAnzahl", typ: "liste", label: "Anzahl Kunststofftanks", optionen: Array.from({ length: 10 }, (_, i) => String(i + 1)), breite: "drittel", wenn: { feld: "tankart", wert: "Kunststofftank" } },
+
         { typ: "abschnitt", titel: "2. Verbrauch · 3. Zeitraum · 4. Budget" },
         { id: "verbrauch", typ: "text", label: "Öl- / Gasverbrauch Ø pro Jahr", breite: "halb" },
         { id: "von", typ: "text", label: "Realisierung von", breite: "drittel" },
