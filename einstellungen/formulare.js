@@ -77,6 +77,7 @@
         { id: "energie", typ: "auswahl", label: "Energieträger", optionen: ["Gas", "Öl", "Sonstiges"], pflicht: true, breite: "halb" },
         { id: "energieText", typ: "text", label: "Welcher?", breite: "halb", wenn: { feld: "energie", wert: "Sonstiges" } },
         { id: "kessel", typ: "mehrfach", label: "Kessel / Technik", optionen: ["Brennwertkessel", "Brauchwasserwärmepumpe", "Solar"] },
+        { id: "solarFuer", typ: "mehrfach", label: "Solar für", optionen: ["Heizung", "Warmwasser"], wenn: { feld: "kessel", wert: "Solar" } },
         { id: "kesselBaujahr", typ: "zahl", label: "Baujahr", breite: "drittel" },
         { id: "kesselLeistung", typ: "zahl", label: "Leistung", einheit: "kW", breite: "drittel" },
         { id: "kesselNotiz", typ: "text", label: "Hersteller / Typ / Sonstiges", breite: "drittel" },
