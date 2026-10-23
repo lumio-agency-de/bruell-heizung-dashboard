@@ -10,6 +10,7 @@
                                 { beiJaFormular: "tuer" } → bei „Ja“ erscheint ein Knopf zu diesem Formular
      auswahl     eine Option          { optionen: [...] }
      mehrfach    mehrere Optionen     { optionen: [...] }
+     liste       Dropdown, eine Option { optionen: [...] }
      kunde       Feld der Kundendaten (wird mit dem Projekt geteilt)   { feld: "vorname" }
      wer         Auswahlliste „Wer macht das?“: eigene Monteure + externe Partner
                  { gewerk: "Elektro" } filtert die Partner nach Gewerk;
@@ -72,13 +73,16 @@
         { id: "einheiten", typ: "zahl", label: "Anzahl Wohneinheiten", breite: "drittel" },
 
         { typ: "abschnitt", titel: "1. Vorhandene Heizung" },
-        { id: "system", typ: "auswahl", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Einzelofen"], pflicht: true },
+        { id: "system", typ: "auswahl", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Zusätzlicher Holzofen"], pflicht: true },
         { id: "energie", typ: "auswahl", label: "Energieträger", optionen: ["Gas", "Öl", "Sonstiges"], pflicht: true, breite: "halb" },
         { id: "energieText", typ: "text", label: "Welcher?", breite: "halb", wenn: { feld: "energie", wert: "Sonstiges" } },
-        { id: "kessel", typ: "mehrfach", label: "Kessel / Technik", optionen: ["Konstanttemperaturkessel", "Niedertemperaturkessel", "Brennwertkessel", "Wärmepumpe", "Solar"] },
+        { id: "kessel", typ: "mehrfach", label: "Kessel / Technik", optionen: ["Brennwertkessel", "Wärmepumpe", "Solar"] },
         { id: "kesselBaujahr", typ: "zahl", label: "Baujahr", breite: "drittel" },
         { id: "kesselLeistung", typ: "zahl", label: "Leistung", einheit: "kW", breite: "drittel" },
         { id: "kesselNotiz", typ: "text", label: "Hersteller / Typ / Sonstiges", breite: "drittel" },
+        { id: "rohrsystem", typ: "auswahl", label: "Rohrsystem", optionen: ["Einrohrsystem", "Zweirohrsystem"], breite: "halb" },
+        { id: "heizkoerper", typ: "liste", label: "Anzahl Heizkörper", optionen: [...Array.from({ length: 30 }, (_, i) => String(i + 1)), "mehr als 30"], breite: "halb" },
+        { id: "flaechenheizung", typ: "mehrfach", label: "Flächenheizung", optionen: ["FBH (Fußbodenheizung)", "Wandheizung"] },
 
         { typ: "abschnitt", titel: "2. Verbrauch · 3. Zeitraum · 4. Budget" },
         { id: "verbrauch", typ: "text", label: "Öl- / Gasverbrauch Ø pro Jahr", breite: "halb" },

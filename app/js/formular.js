@@ -148,6 +148,8 @@
           ${f.beiJa && v === "ja" ? `<input class="eingabe ff-beija" data-ff="${esc(f.id)}Text" value="${esc(w[f.id + "Text"] || "")}" placeholder="${esc(f.beiJa === true ? "Details …" : f.beiJa)}" aria-label="${esc(f.label)} – Details">` : ""}`);
       case "auswahl":
         return wrap(`${lab}<div class="chips" role="radiogroup">${f.optionen.map((o) => `<button type="button" class="chip${v === o ? " an" : ""}" data-ff-wahl="${esc(f.id)}" data-wert="${esc(o)}" role="radio" aria-checked="${v === o}">${esc(o)}</button>`).join("")}</div>`);
+      case "liste":
+        return wrap(`<label>${lab}<select class="eingabe" ${attr}><option value="">– bitte wählen –</option>${f.optionen.map((o) => `<option${v === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select></label>`);
       case "mehrfach": {
         const arr = Array.isArray(v) ? v : [];
         return wrap(`${lab}<div class="chips">${f.optionen.map((o) => `<button type="button" class="chip mehr${arr.includes(o) ? " an" : ""}" data-ff-mehr="${esc(f.id)}" data-wert="${esc(o)}" aria-pressed="${arr.includes(o)}">${esc(o)}</button>`).join("")}</div>`);
