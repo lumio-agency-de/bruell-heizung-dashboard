@@ -65,14 +65,11 @@
         { id: "bauvorhaben", typ: "text", label: "Abweichende Baustellenadresse", breite: "halb" },
 
         { typ: "abschnitt", titel: "Gebäude" },
-        { id: "haus", typ: "auswahl", label: "Gebäude", optionen: ["Einfamilienhaus", "Mehrfamilienhaus", "Wohn-/Geschäftshaus"], pflicht: true },
-        { id: "einheiten", typ: "zahl", label: "Wie viele Wohneinheiten?", breite: "drittel", wenn: { feld: "haus", wert: "Mehrfamilienhaus" } },
+        { id: "haus", typ: "auswahl", label: "Gebäude", optionen: ["Einfamilienhaus", "Mehrfamilienhaus", "ELW (Einliegerwohnung)"], pflicht: true },
         { id: "personen", typ: "zahl", label: "Personen im Haushalt", breite: "drittel" },
         { id: "baujahr", typ: "zahl", label: "Baujahr des Hauses", breite: "drittel" },
         { id: "qm", typ: "zahl", label: "Wohnfläche", einheit: "m²", breite: "drittel", pflicht: true },
-        { id: "qmEigen", typ: "zahl", label: "davon Eigennutzung", einheit: "m²", breite: "drittel" },
-        { id: "qmVermietet", typ: "zahl", label: "davon vermietet", einheit: "m²", breite: "drittel" },
-        { id: "qmGewerbe", typ: "zahl", label: "davon gewerblich", einheit: "m²", breite: "drittel" },
+        { id: "einheiten", typ: "zahl", label: "Anzahl Wohneinheiten", breite: "drittel" },
 
         { typ: "abschnitt", titel: "1. Vorhandene Heizung" },
         { id: "system", typ: "auswahl", label: "Art", optionen: ["Zentralheizung", "Etagenheizung", "Einzelofen"], pflicht: true },
