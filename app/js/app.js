@@ -1525,6 +1525,8 @@
       if (key === "firma.adresse") return `${c.adresse.strasse}, ${c.adresse.ort}`;
       if (key === "firma.mapsLink") return c.adresse.mapsLink;
       if (key === "firma.website") return c.website;
+      if (key === "firma.telefon") return c.telefon || fehlt("Telefon");
+      if (key === "firma.heizungsrechner") return c.heizungsrechner || fehlt("Link Heizungsrechner");
       if (key === "bzaNr") return p.bzaNr || fehlt("BZA-Nummer");
       if (key === "bzdNr") return p.bzdNr || fehlt("BZD-Nummer");
       const [tk, teil] = key.split(".");

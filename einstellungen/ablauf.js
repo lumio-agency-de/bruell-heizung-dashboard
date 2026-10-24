@@ -82,6 +82,7 @@ window.ABSCHNITTE = [
             { id: "rechner", label: "Kosten unklar – auf den {programm.heizungsrechner} verwiesen", status: "pausiert", wiedervorlage: 14, weiter: false },
             { id: "nein", label: "Kein Interesse", status: "verloren", weiter: false },
           ] },
+        { id: "mail-rechner", typ: "mail", mail: "heizungsrechner", titel: "Mail mit Link zum Heizungsrechner senden", wenn: { schritt: "termin-ok", wert: "rechner" } },
         { id: "eg-termin", typ: "termin", termin: "erstgespraech", titel: "Termin Erstgespräch eintragen", wenn: { schritt: "termin-ok", wert: "ja" } },
         { id: "berater", typ: "feld", feld: "zustaendig", titel: "Heizungsexperte(n) fürs Erstgespräch", wenn: { schritt: "termin-ok", wert: "ja" },
           hinweis: "Einen oder mehrere Mitarbeiter auswählen – sie führen das Gespräch und sind im Projekt als Heizungsexperte zuständig." },
