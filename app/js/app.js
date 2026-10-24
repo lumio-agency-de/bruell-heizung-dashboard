@@ -333,7 +333,7 @@
       case "erledigt": return !!st.erledigt;
       case "abschluss": return p.status === "abgeschlossen";
       case "entscheidung": { const o = (s.optionen || []).find((x) => x.id === st.wahl); return !!o && o.weiter !== false; }
-      case "feld": return s.feld === "zustaendig" ? experten(p).length > 0 : !!String(p[s.feld] || "").trim();
+      case "feld": return s.feld === "zustaendig" ? experten(p).length > 0 : s.mehrere ? (p[s.feld] || []).length > 0 : !!String(p[s.feld] || "").trim();
       case "team": return (p.zugriff || []).length > 0;
     }
     return false;
@@ -1188,12 +1188,12 @@
         break;
       }
       case "feld": {
-        const v = s.feld === "zustaendig" ? experten(p).join(", ") : p[s.feld] || "";
+        const v = s.feld === "zustaendig" ? experten(p).join(", ") : s.mehrere ? (p[s.feld] || []).join(", ") : p[s.feld] || "";
         meta = v ? (s.mehrzeilig ? "notiert" : esc(v)) : "";
         inhalt = s.mehrzeilig
           ? `<div class="q-aktion q-notiz"><textarea class="eingabe" data-pfeld="${s.feld}" rows="4" aria-label="${esc(titel)}" placeholder="${esc(s.platzhalter || "eintragen")}">${esc(v)}</textarea></div>`
-          : s.feld === "zustaendig"
-          ? expertenAuswahl(p)
+          : s.feld === "zustaendig" || s.mehrere
+          ? expertenAuswahl(p, s.feld, s.rolle)
           : s.optionen
           ? `<div class="q-aktion"><select class="eingabe auto" data-pfeld="${s.feld}" aria-label="${esc(titel)}"><option value="">– bitte wählen –</option>${s.optionen.map((o) => `<option${v === o ? " selected" : ""}>${esc(o)}</option>`).join("")}</select></div>`
           : `<div class="q-aktion"><input class="eingabe ${s.platzhalter ? "breit" : "auto"}" data-pfeld="${s.feld}" value="${esc(v)}" aria-label="${esc(titel)}" placeholder="${esc(s.platzhalter || "eintragen")}"></div>`;
@@ -1216,13 +1216,14 @@
   }
 
   /* Heizungsexperten wählen: Dropdown mit allen Mitarbeitern, Mehrfachauswahl */
-  function expertenAuswahl(p) {
-    const gew = experten(p);
-    const ma = cfg().team.filter((m) => m.name && m.kuerzel && m.ebene !== "monteur")
-      .sort((a, b) => (b.rolle === "heizungsexperte") - (a.rolle === "heizungsexperte"));
+  /* Mehrfachauswahl von Mitarbeitern: Heizungsexperten (feld „zustaendig“) oder z. B. „besichtiger“ (Liste im Projekt) */
+  function expertenAuswahl(p, feld = "zustaendig", rolle = "heizungsexperte") {
+    const gew = feld === "zustaendig" ? experten(p) : p[feld] || [];
+    const ma = cfg().team.filter((m) => m.name && m.kuerzel && (feld !== "zustaendig" || m.ebene !== "monteur"))
+      .sort((a, b) => (b.rolle === rolle) - (a.rolle === rolle));
     const namen = gew.map((k) => mitgliedZu(k)?.name || k).join(", ");
     return `<details class="mehrwahl"><summary class="eingabe">${namen ? esc(namen) : '<span class="leise">Mitarbeiter auswählen …</span>'}</summary>
-      <div class="mehrwahl-liste">${ma.map((m) => `<label><input type="checkbox" data-experte="${esc(m.kuerzel)}"${gew.includes(m.kuerzel) ? " checked" : ""}> ${esc(m.name)} <span class="leise">(${esc(m.kuerzel)} · ${esc(m.bezeichnung || m.rolle)})</span></label>`).join("")}</div></details>`;
+      <div class="mehrwahl-liste">${ma.map((m) => `<label><input type="checkbox" data-experte="${esc(m.kuerzel)}" data-experte-feld="${esc(feld)}"${gew.includes(m.kuerzel) ? " checked" : ""}> ${esc(m.name)} <span class="leise">(${esc(m.kuerzel)} · ${esc(m.bezeichnung || m.rolle)})</span></label>`).join("")}</div></details>`;
   }
 
   /* Akte rechts: Dateien, Kunde, Termine, Verlauf */
@@ -1991,7 +1992,7 @@
   /* ---------- Beispielprojekte ---------- */
   function demoLaden() {
     const t = (n, h) => { const d = plusTage(new Date(), n); if (d.getDay() === 6) d.setDate(d.getDate() + 2); if (d.getDay() === 0) d.setDate(d.getDate() + 1); return h ? `${isoTag(d)}T${h}` : isoTag(d); };
-    const pl = leute("heizungsexperte").map((m) => m.kuerzel);
+    const pl = leute("heizungsexperte").map((m) => m.kuerzel), bl = leute("baustellenleiter").map((m) => m.kuerzel).slice(0, 1);
     const mk = (kunde, ph, extra) => {
       const level = {}; let tt = Date.now() - (ph * 6 + 4) * TAG;
       PHASEN.filter((x) => x.nr <= ph).forEach((x) => { level[x.nr] = tt; tt += 6 * TAG; });
@@ -2028,12 +2029,12 @@
       { zustaendig: pl[0] || "", projektnr: "H-2026-027", termine: { erstgespraech: t(-9, "15:00") },
         formulare: { erstgespraech: { werte: { neu: ["Gas"], flaechen: ["Heizkörper 60 / 40"], pauschale: "vereinbart" } } } });
     mk({ anrede: "Herr", vorname: "Jonas", nachname: "Vorlage", ort: "71101 Schönaich", strasse: "Gartenstr.", hausnr: "8", email: "jonas@beispiel.de" }, 6,
-      { zustaendig: pl[0] || "", projektnr: "H-2026-019", termine: { erstgespraech: t(-30, "10:00"), baustellenbesichtigung: t(-12, "08:30") },
+      { zustaendig: pl[0] || "", besichtiger: bl, projektnr: "H-2026-019", termine: { erstgespraech: t(-30, "10:00"), baustellenbesichtigung: t(-12, "08:30") },
         formulare: { erstgespraech: { werte: { neu: ["Wärmepumpe"], solar: ["Photovoltaik"], flaechen: ["Fußbodenheizung 35 / 25"] } },
           baustellenbesichtigung: { werte: { weitere: ["Tank leer pumpen", "Tankdemontage", "Elektro groß", "Inbetriebnahme WP"], elektriker: "ja", tank: "ja", geruest: "nein", kamin: "nein" } } } });
     const mo = monteure().map((m) => m.kuerzel), pa = (cfg().partner || []).map((x) => x.id);
     mk({ anrede: "Familie", nachname: "Testfeld", ort: "71093 Weil im Schönbuch", strasse: "Schulstr.", hausnr: "1", email: "testfeld@beispiel.de", telefon: "07157 000000" }, 9,
-      { zustaendig: pl[0] || "", projektnr: "H-2026-011", termine: { baustart: t(5), abnahme: t(9, "10:00") }, zugriff: [...mo.slice(0, 1), ...pa],
+      { zustaendig: pl[0] || "", besichtiger: bl, projektnr: "H-2026-011", termine: { baustart: t(5), abnahme: t(9, "10:00") }, zugriff: [...mo.slice(0, 1), ...pa],
         notiz: "Interne Notiz: Kunde zahlt in zwei Raten.",
         schritte: { "6:foerderung": { wahl: "ja", am: Date.now() }, "6:zusage": { wahl: "zusage", am: Date.now() } }, bzaNr: "BZA-1234567",
         formulare: { erstgespraech: { werte: { neu: ["Gas"], solar: ["Warmwasserbereitung"], flaechen: ["Heizkörper 60 / 40"] } },
@@ -2612,10 +2613,17 @@
       return teilRendern(p);
     }
     if (el.dataset.experte && p) {
-      const alt = experten(p), k = el.dataset.experte;
+      const feld = el.dataset.experteFeld || "zustaendig", k = el.dataset.experte;
+      const alt = feld === "zustaendig" ? experten(p) : p[feld] || [];
       const neu = el.checked ? [...alt.filter((x) => x !== k), k] : alt.filter((x) => x !== k);
       const m = mitgliedZu(k);
-      aendern(p, (x) => { x.experten = neu; x.zustaendig = neu[0] || ""; }, `Heizungsexperte ${el.checked ? "hinzugefügt" : "entfernt"}: ${m ? m.name : k}`);
+      const was = feld === "zustaendig" ? "Heizungsexperte" : "Baustellenbesichtigung";
+      aendern(p, (x) => {
+        if (feld === "zustaendig") { x.experten = neu; x.zustaendig = neu[0] || ""; return; }
+        x[feld] = neu;
+        /* Monteure sehen nur Projekte, denen sie zugewiesen sind → bei Auswahl Zugriff geben */
+        if (el.checked && m && m.ebene === "monteur" && !(x.zugriff || []).includes(k)) x.zugriff = [...(x.zugriff || []), k];
+      }, `${was}: ${m ? m.name : k} ${el.checked ? "hinzugefügt" : "entfernt"}`);
       kopfNeu(p); teilRendern(p);
       const d = document.querySelector("details.mehrwahl"); if (d) d.open = true;
       return;

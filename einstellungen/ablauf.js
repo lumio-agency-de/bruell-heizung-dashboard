@@ -20,7 +20,8 @@
      abschluss    Knopf „Projekt abschließen & archivieren“ (letztes Level)
      frueher: n   Schritt lag früher in Level n – bisheriger Stand wird übernommen
      feld         ein Projektfeld ausfüllen                 { feld: "projektnr" | "zustaendig" | "bzaNr" … }, mehrzeilig: true → Notizfeld,
-                  optionen: [...] → Dropdown, platzhalter: "…" → Hinweis im leeren Feld
+                  optionen: [...] → Dropdown, platzhalter: "…" → Hinweis im leeren Feld,
+                  mehrere: true → Mitarbeiter-Mehrfachauswahl (rolle: wer oben steht)
      team         Monteure & Partner dem Projekt zuweisen
 
    portal: [...]    → Ordner, in die der Kunde in diesem Level über seinen Link hochladen kann
@@ -137,13 +138,15 @@ window.ABSCHNITTE = [
         { id: "unterschrift", typ: "dateien", kategorie: "auftrag", kundenlink: true, titel: "Unterschriebenes Angebot einscannen / hochladen", wenn: { schritt: "ergebnis", wert: "auftrag" } },
         { id: "angebot-notiz", typ: "feld", feld: "angebotNotiz", mehrzeilig: true, pflicht: false, titel: "Notizen zum Angebot",
           platzhalter: "z. B. Änderungswünsche, Rabatt (Fotorabatt?), offene Fragen, was nachgereicht wird …" },
-        { id: "bb-termin", typ: "termin", termin: "baustellenbesichtigung", titel: "Heizlastberechnung & Baustellenbesichtigung bei {baustellenleiter} eintragen", wenn: { schritt: "ergebnis", wert: "auftrag" } },
       ],
     },
     {
       nr: 5, titel: "Baustellenbesichtigung", abschnitt: "auftrag",
       ziel: "Vor Ort aufmessen, Heizlast ermitteln und alles für die Monteure festhalten.",
       schritte: [
+        { id: "bb-termin", typ: "termin", termin: "baustellenbesichtigung", titel: "Termin Heizlastberechnung & Baustellenbesichtigung eintragen" },
+        { id: "besichtiger", typ: "feld", feld: "besichtiger", mehrere: true, rolle: "baustellenleiter", titel: "Wer macht die Baustellenbesichtigung?",
+          hinweis: "Einen oder mehrere Mitarbeiter auswählen – sie fahren zur Besichtigung. Ausgewählte Monteure bekommen automatisch Zugriff aufs Projekt." },
         { id: "checkliste", typ: "formular", formular: "baustellenbesichtigung", titel: "Baustellenbesichtigung", ebene: ["planung", "monteur"] },
         { id: "tank", typ: "formular", formular: "tankdemontage", titel: "Checkliste Tankdemontage", ebene: ["planung", "monteur"],
           wenn: [{ formular: "baustellenbesichtigung", feld: "weitere", wert: "Tankdemontage" }, { formular: "baustellenbesichtigung", feld: "weitere", wert: "Tank leer pumpen" }] },
