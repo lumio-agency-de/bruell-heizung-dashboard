@@ -109,9 +109,11 @@
   /* Heizungsexperten eines Projekts (mehrere möglich); ältere Projekte haben nur „zustaendig“ */
   const experten = (p) => (p.experten && p.experten.length ? p.experten : p.zustaendig ? [p.zustaendig] : []);
   const kuerzelListe = () => cfg().team.filter((m) => m.kuerzel).map((m) => m.kuerzel);
-  function ersetzen(text) {
+  function ersetzen(text, p) {
     const c = cfg();
     return String(text).replace(/\{([a-zA-Z0-9.]+)\}/g, (m, key) => {
+      /* {besichtiger}: wer in Level 5 für die Baustellenbesichtigung ausgewählt ist */
+      if (key === "besichtiger") return ((p && p.besichtiger) || []).map((k) => mitgliedZu(k)?.name || k).join(" und ") || "Baustellenleiter";
       if (key.startsWith("programm.")) return c.programme[key.slice(9)] ?? m;
       if (c.team.some((t) => t.rolle === key)) return namen(key);
       return m;
@@ -348,7 +350,7 @@
   function naechsterSchritt(p) {
     if (p.status === "abgeschlossen") return "Abgeschlossen";
     const st = phaseStatus(p, p.phase);
-    return st.komplett ? "Bereit für das nächste Level" : ersetzen(st.offen[0].s.titel);
+    return st.komplett ? "Bereit für das nächste Level" : ersetzen(st.offen[0].s.titel, p);
   }
 
   /* ---------- Schreibschutz: ein Projekt bearbeitet immer nur eine Person ---------- */
@@ -942,7 +944,7 @@
         const meine = st.liste.filter((x) => !x.erledigt && darfSchritt(x.s));
         return `<article class="panel einsatz-karte"><header><span class="lv-mini">${zwei(p.phase)}</span><div><h2>${esc(anzeigeName(p))}</h2><p>${esc(adr(k))}</p></div></header>
           <dl class="infos"><dt>Baustart</dt><dd>${esc(fTermin((p.termine || {}).baustart) || "—")}</dd><dt>Abnahme</dt><dd>${esc(fTermin((p.termine || {}).abnahme) || "—")}</dd><dt>Telefon</dt><dd>${[k.telefon, k.mobil].filter(Boolean).map((x) => `<a href="tel:${esc(x.replace(/[^\d+]/g, ""))}">${esc(x)}</a>`).join(" · ") || "—"}</dd></dl>
-          ${meine.length ? `<p class="q-gruppe">Für dich offen</p><ul class="einfach">${meine.map((x) => `<li>${esc(ersetzen(x.s.titel))}</li>`).join("")}</ul>` : ""}
+          ${meine.length ? `<p class="q-gruppe">Für dich offen</p><ul class="einfach">${meine.map((x) => `<li>${esc(ersetzen(x.s.titel, p))}</li>`).join("")}</ul>` : ""}
           <footer class="aktionen"><a class="btn voll" href="#/projekt/${p.id}">Öffnen <span class="pfeil">→</span></a>${p.downloadCode ? `<button class="btn" data-aktion="palettemove" data-id="${p.id}">3D-Planung (${esc(cfg().programme.app3d)})</button>` : ""}
           ${k.strasse ? `<a class="btn still" href="https://maps.google.com/?q=${encodeURIComponent(adr(k))}" target="_blank" rel="noopener">Route</a>` : ""}</footer></article>`;
       }).join("")}</div>` : `<div class="panel startfeld"><h2>Keine Baustellen</h2><p>Sobald dich das Büro einer Baustelle zuweist, erscheint sie hier.</p></div>`}</div>`;
@@ -1118,18 +1120,18 @@
       </header>
       <ol class="quests">${st.liste.map((x, k) => quest(p, nr, x, k)).join("")}</ol>
       <footer class="mission-fuss">${istJetzt && !istBuero()
-        ? `<span class="offen-text">${st.komplett ? "Alles erledigt – das Büro schaltet das nächste Level frei." : `Noch offen: ${st.offen.map((x) => esc(ersetzen(x.s.titel))).join(" · ")}`}</span>`
+        ? `<span class="offen-text">${st.komplett ? "Alles erledigt – das Büro schaltet das nächste Level frei." : `Noch offen: ${st.offen.map((x) => esc(ersetzen(x.s.titel, p))).join(" · ")}`}</span>`
         : istJetzt
         ? (st.komplett
           ? `<span class="bereit-text">Alles erledigt – Level freischalten.</span><button class="btn jetzt gross" data-aktion="abschliessen">${weiter ? `Weiter zu Level ${zwei(weiter)}: ${esc(phase(weiter).titel)}` : "Projekt abschließen & archivieren"} <span class="pfeil">→</span></button>`
-          : `<span class="offen-text">Noch offen: ${st.offen.map((x) => esc(ersetzen(x.s.titel))).join(" · ")}</span><button class="btn gross gesperrt" data-aktion="offen-zeigen">${weiter ? `Weiter zu Level ${zwei(weiter)}` : "Projekt abschließen"} <span class="schloss-mini" aria-hidden="true"></span></button>`)
+          : `<span class="offen-text">Noch offen: ${st.offen.map((x) => esc(ersetzen(x.s.titel, p))).join(" · ")}</span><button class="btn gross gesperrt" data-aktion="offen-zeigen">${weiter ? `Weiter zu Level ${zwei(weiter)}` : "Projekt abschließen"} <span class="schloss-mini" aria-hidden="true"></span></button>`)
         : `<span class="offen-text">Dieses Level ist abgeschlossen. Änderungen bleiben möglich.</span><button class="btn voll" data-aktion="level" data-nr="${p.phase}">Zum aktuellen Level ${zwei(p.phase)}</button>`}
       </footer></section>`;
   }
 
   function quest(p, nr, x, k) {
     const s = x.s, key = sKey(nr, s), st = schrittStand(p, nr, s);
-    const titel = ersetzen(s.titel);
+    const titel = ersetzen(s.titel, p);
     let inhalt = "", meta = "";
     switch (s.typ) {
       case "formular": {
@@ -2068,7 +2070,7 @@
     const faellig = laufend.flatMap(faelligkeiten).sort((a, b) => a.d - b.d).map((f) => ({ ...kurz(f.p), text: f.text, unter: f.unter, d: +f.d, ueber: f.ueber }));
     const naechstes = laufend.filter((p) => p.status === "aktiv").map((p) => {
       const st = phaseStatus(p, p.phase), o = st.offen[0];
-      return { ...kurz(p), phase: p.phase, level: phase(p.phase).titel, schritt: o ? ersetzen(o.s.titel) : "Level abschließen", fertig: st.fertig, pflicht: st.pflicht, komplett: st.komplett };
+      return { ...kurz(p), phase: p.phase, level: phase(p.phase).titel, schritt: o ? ersetzen(o.s.titel, p) : "Level abschließen", fertig: st.fertig, pflicht: st.pflicht, komplett: st.komplett };
     }).sort((a, b) => (b.komplett - a.komplett) || (b.phase - a.phase));
     const termine = [];
     for (const p of alle()) for (const t of TERMINE) {
@@ -2383,7 +2385,7 @@
     }
     if (akt === "bestaetigen" && p) {
       const key = a.dataset.key; const an = !((p.schritte || {})[key] || {}).erledigt;
-      aendern(p, (x) => { x.schritte = x.schritte || {}; x.schritte[key] = an ? { erledigt: true, am: Date.now(), von: S.ich.name || "" } : {}; }, an ? `Erledigt: ${ersetzen(schrittTitel(key))}` : null);
+      aendern(p, (x) => { x.schritte = x.schritte || {}; x.schritte[key] = an ? { erledigt: true, am: Date.now(), von: S.ich.name || "" } : {}; }, an ? `Erledigt: ${ersetzen(schrittTitel(key), p)}` : null);
       return teilRendern(p);
     }
     if (akt === "wahl" && p) {
