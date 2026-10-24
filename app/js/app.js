@@ -113,6 +113,8 @@
     const c = cfg();
     return String(text).replace(/\{([a-zA-Z0-9.]+)\}/g, (m, key) => {
       /* {besichtiger}: wer in Level 5 für die Baustellenbesichtigung ausgewählt ist */
+      /* {experteHat}: in Level 1 ausgewählte Heizungsexperten + passendes Verb („… hat“ / „… und … haben“) */
+      if (key === "experteHat") { const n = (p ? experten(p) : []).map((k) => mitgliedZu(k)?.name || k); return n.length > 1 ? `${n.join(" und ")} haben` : `${n[0] || "Der Heizungsexperte"} hat`; }
       if (key === "besichtiger") return ((p && p.besichtiger) || []).map((k) => mitgliedZu(k)?.name || k).join(" und ") || "Baustellenleiter";
       if (key.startsWith("programm.")) return c.programme[key.slice(9)] ?? m;
       if (c.team.some((t) => t.rolle === key)) return namen(key);
