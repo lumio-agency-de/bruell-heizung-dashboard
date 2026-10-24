@@ -244,6 +244,7 @@
           { id: "parken", label: "Bilder Parkmöglichkeiten" },
           { id: "vormauerung", label: "Bilder Öltankraum (Vormauerung)", optional: true },
           { id: "zaehlerschrank", label: "Bilder Zählerschrank" },
+          { id: "lager", label: "Bilder Lagermöglichkeiten", optional: true },
           { id: "garten", label: "Bilder Garten", optional: true },
           { id: "hausverwaltung", label: "Info Hausverwaltung", optional: true },
         ] },
