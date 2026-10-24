@@ -152,7 +152,7 @@ window.ABSCHNITTE = [
           wenn: [{ formular: "baustellenbesichtigung", feld: "weitere", wert: "Tankdemontage" }, { formular: "baustellenbesichtigung", feld: "weitere", wert: "Tank leer pumpen" }] },
         { id: "heizlast", typ: "dateien", kategorie: "planung", titel: "Heizlastberechnung ablegen",
           ersatz: "Keine Heizlastberechnung nötig" },
-        { id: "uebergabe", typ: "erledigt", titel: "{experteHat} die Baustelle mit Baustellenleiter besprochen" },
+        { id: "uebergabe", typ: "erledigt", titel: "{besichtigerHat} die Baustelle mit Baustellenleiter besprochen" },
       ],
     },
     {
