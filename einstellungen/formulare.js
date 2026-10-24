@@ -23,6 +23,7 @@
      unterschrift  Unterschriftenfeld (Maus, Finger, Stift)
      tabelle     { spalten: [{ id, titel, typ }], zeilen: ["Armatur", …] }
                  ohne zeilen → Zeilen frei hinzufügen
+                 summe: { spalte, einheit, label } → Spalte unter der Tabelle zusammenzählen
      checkliste  { punkte: [{ id, label, optional }], modus: "haken" | "janein" | "pruefung" }
                  Tabellen mit festen Zeilen bekommen automatisch „+ Eigene Zeile“
 
@@ -267,6 +268,11 @@
         { id: "kamin", typ: JN, label: "Kamin / Abgasanlage (Fremdfirma)", pflicht: true, breite: "drittel", start: 1 },
         { id: "kaminWer", typ: "wer", gewerk: "Kaminbau", label: "Kamin – wer?", breite: "drittel", wenn: { feld: "kamin", wert: "ja" } },
         { id: "kaminWann", typ: "liste", label: "Kamin – wann?", optionen: Array.from({ length: 10 }, (_, i) => `Tag ${i + 1}`), breite: "drittel", wenn: { feld: "kamin", wert: "ja" } },
+        { typ: "abschnitt", titel: "Stundeneinschätzung" },
+        { id: "stunden", typ: "tabelle", label: "Geschätzte Stunden je Arbeitsablauf",
+          zeilen: ["Demontage Altanlage", "Tank leer pumpen / Tankdemontage", "Montage Wärmeerzeuger", "Hydraulik / Verrohrung", "Abgasanlage / Kamin", "Elektroanschluss", "Befüllen, Spülen & Inbetriebnahme", "Einweisung Kunde", "Aufräumen & Entsorgung"],
+          spalten: [{ id: "monteure", titel: "Monteure", typ: "zahl" }, { id: "std", titel: "Stunden", typ: "zahl" }, { id: "notiz", titel: "Notiz" }],
+          summe: { spalte: "std", einheit: "Std.", label: "Gesamt" } },
         { typ: "abschnitt", titel: "Sonstige Notizen" },
         { id: "skizze", typ: "dateien", kategorie: "skizzen", auchAus: ["grundriss"], label: "Skizze Heizraum mit Bemaßung" },
         { id: "notizen", typ: "textarea", label: "Notizen Baustellenbesichtigung" },

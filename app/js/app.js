@@ -2570,6 +2570,8 @@
           const o = (w[el.dataset.checkNotiz] = w[el.dataset.checkNotiz] || {}); (o[el.dataset.punkt] = o[el.dataset.punkt] || {}).n = el.value;
         }
       });
+      const sm = el.dataset.tab && seite.querySelector(`[data-summe="${el.dataset.tab}"]`);
+      if (sm) sm.textContent = Formular.summe((Formular.def(fid).felder || []).find((f) => f.id === el.dataset.tab), w[el.dataset.tab]);
       formularNeuZeichnen(p, fid);
       return;
     }
